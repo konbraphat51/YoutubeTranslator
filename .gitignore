@@ -1,3 +1,4 @@
 cache/
+!.gitkeep
 __pycache__/
 outputs/
