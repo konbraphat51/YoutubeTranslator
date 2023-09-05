@@ -1,4 +1,4 @@
-cache/*
-!.gitkeep
+YoutubeTranslator/cache/*
+!YoutubeTranslator/cache/.gitkeep
 __pycache__/
 outputs/
