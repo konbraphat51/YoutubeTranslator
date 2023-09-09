@@ -7,28 +7,30 @@ class Transcriber:
     Transcribes video to text data.
     '''
     
-    def __init__(self, consts: Consts):
+    def __init__(self, consts: Consts, model_name: str = "large-v2"):
         self.consts = consts
-        self.model_name = "large-v2"
+        self.model_name = model_name
     
-    def run(self, file_name: str):
+    def run(self):
+        '''  
+        output: [pandas.DataFrame(start, end, text), str(language)]
         '''
-        input: file path of video to transcribe  
-        output: [pandas.DataFrame(start, end, text), language(str)]
-        '''
-        df_transcription, lang = self.transcribe(file_name)
+        df_transcription, lang = self.transcribe(str(self.consts.original_video_path()))
         
         return [df_transcription, lang]
     
-    def transcribe(self, file_name: str):
+    def transcribe(self, audio_file_name: str):
         model = WhisperModel(self.model_name, device="cuda")
+        segments, info = model.transcribe(audio_file_name)
         
-        segments, info = model.transcribe(file_name)
-        
+        #convert into pd.DataFrame
         transcriptions = []
         for segment in segments:
             transcriptions.append([segment.start, segment.end, segment.text])
-            
         df_transcription = pd.DataFrame(transcriptions, columns=["start", "end", "text"])
         
-        return df_transcription, info["language"]
+        return df_transcription, info.language
+    
+if __name__ == "__main__":
+    transcriber = Transcriber(Consts())
+    transcriber.run()
