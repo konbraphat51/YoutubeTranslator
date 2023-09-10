@@ -14,11 +14,15 @@ class YoutubeTranslator:
         video_link: str,
         language_destination:str = "English"
     ):
+        #download video
         VideoGetter(self.consts).run(video_link)
+
+        #transcribe
         df_transcription, original_language = Transcriber(self.consts).run()
+
+        #translate language
         df_translated = LanguageTranslator(self.consts).run(df_transcription, original_language, self.consts.get_language_code_from_full(language_destination))
-        
-        print(df_translated)
+        df_translated.to_csv(self.consts.translation_text_path(), index=True)
         
 if __name__ == "__main__":
-    YoutubeTranslator(Consts("APIkey.txt")).run("https://www.youtube.com/watch?v=ThhhNAMaJcw")
+    YoutubeTranslator(Consts("test", "APIkey.txt")).run("https://www.youtube.com/watch?v=ThhhNAMaJcw")

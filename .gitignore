@@ -1,5 +1,5 @@
-YoutubeTranslator/cache/*
-!YoutubeTranslator/cache/.gitkeep
+YoutubeTranslator/output/*
+!YoutubeTranslator/output/.gitkeep
 __pycache__/
 outputs/
 APIkey.txt

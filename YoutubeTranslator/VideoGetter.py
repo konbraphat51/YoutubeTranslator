@@ -28,4 +28,4 @@ class VideoGetter:
         yt.streams.filter(file_extension='mp4').first().download(filename=self.consts.original_video_path())
     
 if __name__ == "__main__":
-    VideoGetter(Consts("APIkey.txt")).run("https://www.youtube.com/watch?v=ThhhNAMaJcw")
+    VideoGetter(Consts("test", "APIkey.txt")).run("https://www.youtube.com/watch?v=ThhhNAMaJcw")

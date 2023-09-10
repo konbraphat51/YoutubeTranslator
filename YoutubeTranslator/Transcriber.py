@@ -36,5 +36,5 @@ class Transcriber:
         return (df_transcription, info.language)
     
 if __name__ == "__main__":
-    transcriber = Transcriber(Consts("APIkey.txt"))
+    transcriber = Transcriber(Consts("test", "APIkey.txt"))
     print(transcriber.run()[1])
