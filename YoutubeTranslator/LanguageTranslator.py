@@ -4,6 +4,10 @@ from typing import List
 import deepl
 
 class LanguageTranslator:
+    '''
+    Translate transcribed text data to another language.
+    '''
+    
     def __init__(self, consts: Consts):
         self.consts = consts
         
