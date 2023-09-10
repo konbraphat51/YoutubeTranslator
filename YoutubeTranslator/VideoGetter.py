@@ -1,5 +1,6 @@
 import pytube
 from YoutubeTranslator.Utils import Consts
+import pathlib
 
 class VideoGetter:
     '''
@@ -10,7 +11,7 @@ class VideoGetter:
     def __init__(self, consts: Consts):
         self.consts = consts        
     
-    def run(self, url: str):
+    def run(self, url: str) -> pathlib.Path:
         '''
         input: url of youtube video to process  
         output: mp4path
@@ -27,4 +28,4 @@ class VideoGetter:
         yt.streams.filter(file_extension='mp4').first().download(filename=self.consts.original_video_path())
     
 if __name__ == "__main__":
-    VideoGetter(Consts()).run("https://www.youtube.com/watch?v=ThhhNAMaJcw")
+    VideoGetter(Consts("APIkey.txt")).run("https://www.youtube.com/watch?v=ThhhNAMaJcw")

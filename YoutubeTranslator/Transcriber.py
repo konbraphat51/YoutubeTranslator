@@ -1,3 +1,4 @@
+from typing import Tuple
 from YoutubeTranslator.Utils import Consts
 from faster_whisper import WhisperModel
 import pandas as pd
@@ -11,13 +12,16 @@ class Transcriber:
         self.consts = consts
         self.model_name = model_name
     
-    def run(self):
+    def run(self) -> Tuple[pd.DataFrame, Consts.LanguageCode]:
         '''  
-        output: [pandas.DataFrame(start, end, text), str(language)]
+        output: [DataFrame(start, end, transcription), language]
         '''
-        df_transcription, lang = self.transcribe(str(self.consts.original_video_path()))
+        df_transcription, lang = self.transcribe(self.consts.original_video_path().as_posix())
         
-        return [df_transcription, lang]
+        #convert language code
+        lang_code = self.consts.get_language_code_from_whisper(lang)
+        
+        return (df_transcription, lang_code)
     
     def transcribe(self, audio_file_name: str):
         model = WhisperModel(self.model_name, device="cuda")
@@ -29,8 +33,8 @@ class Transcriber:
             transcriptions.append([segment.start, segment.end, segment.text])
         df_transcription = pd.DataFrame(transcriptions, columns=["start", "end", "text"])
         
-        return df_transcription, info.language
+        return (df_transcription, info.language)
     
 if __name__ == "__main__":
-    transcriber = Transcriber(Consts())
-    transcriber.run()
+    transcriber = Transcriber(Consts("APIkey.txt"))
+    print(transcriber.run()[1])
