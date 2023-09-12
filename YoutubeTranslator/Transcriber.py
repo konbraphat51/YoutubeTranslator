@@ -35,11 +35,17 @@ class TranscriberWhisper(Transcriber):
         #convert into pd.DataFrame
         transcriptions = []
         for segment in segments:
-            transcriptions.append([segment.start, segment.end, segment.text])
+            #connect in-the-row segments
+            #if former end == this start
+            if (len(transcriptions) > 0) and (segment.start - transcriptions[-1][1] < 0.1):
+                transcriptions[-1][2] += " " + segment.text
+                transcriptions[-1][1] = segment.end
+            else:
+                transcriptions.append([segment.start, segment.end, segment.text])
         df_transcription = pd.DataFrame(transcriptions, columns=["start", "end", "text"])
         
         return (df_transcription, self.consts.get_language_code_from_whisper(info.language))
     
 if __name__ == "__main__":
-    transcriber = Transcriber(Consts("test", "APIkey.txt"))
+    transcriber = TranscriberWhisper(Consts("test", "APIkey.txt"))
     print(transcriber.run()[1])
