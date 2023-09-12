@@ -27,6 +27,14 @@ class Consts:
         self.original_video_file_name:str = "original_video.mp4"
         self.translation_text_file_name:str = "translation_text.csv"
         
+        self.original_sound_cut_folder:pathlib.Path = self.project_directory / "original_sound_cut"
+        if not self.original_sound_cut_folder.exists():
+            mkdir(self.original_sound_cut_folder)
+        
+        self.generated_sound_folder:pathlib.Path = self.project_directory / "generated_sound"
+        if not self.generated_sound_folder.exists():
+            mkdir(self.generated_sound_folder)
+        
         self.__initialize_api(api_txt)
         
         self.language_codes:List[Consts.LanguageCode] = [

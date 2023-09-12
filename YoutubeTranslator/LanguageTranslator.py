@@ -28,7 +28,15 @@ class LanguageTranslator:
         df_output["translated_text"] = translated_texts
         
         return df_output
+    
+    def translate(self, texts: List[str], original_language: Consts.LanguageCode, destination_language: Consts.LanguageCode) -> List[str]:
+        '''
+        input: list of text
+        output: list of translated text
+        '''
+        raise NotImplementedError("You must implement this method in a subclass.")
             
+class LanguageTranslatorDeepl(LanguageTranslator):
     def translate(self, texts: List[str], original_language: Consts.LanguageCode, destination_language: Consts.LanguageCode) -> List[str]:
         #using deepl
         translator = deepl.Translator(self.consts.deepl_api_key)

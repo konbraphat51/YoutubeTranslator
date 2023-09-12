@@ -18,12 +18,17 @@ class Transcriber:
         '''
         df_transcription, lang = self.transcribe(self.consts.original_video_path().as_posix())
         
-        #convert language code
-        lang_code = self.consts.get_language_code_from_whisper(lang)
-        
-        return (df_transcription, lang_code)
+        return (df_transcription, lang)
     
-    def transcribe(self, audio_file_name: str):
+    def transcribe(self, audio_file_name: str) -> Tuple[pd.DataFrame, Consts.LanguageCode]:
+        '''
+        input: audio file name
+        output: [DataFrame(start, end, transcription), language]
+        '''
+        raise NotImplementedError("You must implement this method in a subclass.")
+    
+class TranscriberWhisper(Transcriber):
+    def transcribe(self, audio_file_name: str) -> Tuple[pd.DataFrame, Consts.LanguageCode]:
         model = WhisperModel(self.model_name, device="cuda")
         segments, info = model.transcribe(audio_file_name)
         
@@ -33,7 +38,7 @@ class Transcriber:
             transcriptions.append([segment.start, segment.end, segment.text])
         df_transcription = pd.DataFrame(transcriptions, columns=["start", "end", "text"])
         
-        return (df_transcription, info.language)
+        return (df_transcription, self.consts.get_language_code_from_whisper(info.language))
     
 if __name__ == "__main__":
     transcriber = Transcriber(Consts("test", "APIkey.txt"))
