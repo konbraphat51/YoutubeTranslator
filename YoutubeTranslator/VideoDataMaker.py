@@ -78,7 +78,7 @@ class VideoDataMaker:
         sub_integrated = srt.compose(subs)
         
         #save
-        with open((self.consts.srt_path()).as_posix(), "w") as f:
+        with open((self.consts.srt_path()).as_posix(), "w", encoding="utf-8") as f:
             f.write(sub_integrated)
             
     def make_sub_text(self, text_before:str, text_after:str) -> str:
