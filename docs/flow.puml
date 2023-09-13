@@ -1,0 +1,33 @@
+@startuml
+
+start
+
+card VideoGetter{
+    :Get video from youtube;
+}
+floating note: 動画をダウンロード
+
+card Transcriber{
+    :Transcribe video;
+}
+floating note: 音声を文字テキストに変換
+
+card LanguageTranslator{
+    :Translate text;
+}
+floating note: テキストを翻訳
+
+card TranslateVoice{
+    :Generate Translated voice;
+}
+floating note: 翻訳されたテキストを音声に変換
+
+card VideoDataMaker{
+    :Make single audio;
+    :Make subtitle file;
+}
+floating note: 動画編集データを作成
+
+stop
+
+@enduml
