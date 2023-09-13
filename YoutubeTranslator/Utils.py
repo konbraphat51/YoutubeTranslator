@@ -66,12 +66,12 @@ class Consts:
         
         return self.project_directory / self.translation_text_file_name
     
-    def integrated_sound_path(self) -> pathlib.Path:
+    def integrated_sound_path(self, format:str = "wav") -> pathlib.Path:
         '''
         Get path of integrated sound file.
         '''
         
-        return self.generated_sound_folder / "integrated.mp3"
+        return self.generated_sound_folder / ("integrated." + format)
     
     def generated_translation_path(self) -> pathlib.Path:
         '''

@@ -27,7 +27,7 @@ class VideoDataMaker:
         if should_make_sub:
             self.make_sub(df_generated)
     
-    def make_single_audio(self, df_translated: pd.DataFrame) -> pd.DataFrame:
+    def make_single_audio(self, df_translated: pd.DataFrame, format:str = "wav") -> pd.DataFrame:
         '''
         Make single audio file from translated text.  
         Output: DataFrame of (start, end, text, translated_text, generated_start, generated_end)
@@ -49,7 +49,7 @@ class VideoDataMaker:
             ends.append(combined.duration_seconds)
             
         #save
-        combined.export((self.consts.integrated_sound_path()).as_posix(), format="mp3")
+        combined.export((self.consts.integrated_sound_path(format)).as_posix(), format=format)
         
         #add to df
         df_output = df_translated.copy()
