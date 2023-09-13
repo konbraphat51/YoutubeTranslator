@@ -14,7 +14,7 @@ class Consts:
             self.whisper:str = whisper
             self.deepl:str = deepl
     
-    def __init__(self, project_title:str, api_txt: pathlib) -> None:
+    def __init__(self, project_title:str, api_txt: pathlib.Path) -> None:
         self.project_title:str = project_title
         
         self.working_directory:pathlib.Path = pathlib.Path(__file__).parent
@@ -42,7 +42,7 @@ class Consts:
             self.LanguageCode("Japanese", "ja", "JA"),
         ]
         
-    def __initialize_api(self, api_txt: pathlib) -> None:
+    def __initialize_api(self, api_txt: pathlib.Path) -> None:
         with open(api_txt, "r") as f:
             #by row
             for row in f.readlines():
@@ -51,19 +51,40 @@ class Consts:
                 if name == "deepl":
                     self.deepl_api_key:str = key
         
-    def original_video_path(self) -> pathlib:
+    def original_video_path(self) -> pathlib.Path:
         '''
         Get path of original video file got from youtube.
         '''
         
         return self.project_directory / self.original_video_file_name
     
-    def translation_text_path(self) -> pathlib:
+    def translation_text_path(self) -> pathlib.Path:
         '''
         Get path of translation text file.
         '''
         
         return self.project_directory / self.translation_text_file_name
+    
+    def integrated_sound_path(self) -> pathlib.Path:
+        '''
+        Get path of integrated sound file.
+        '''
+        
+        return self.generated_sound_folder / "integrated.mp3"
+    
+    def generated_translation_path(self) -> pathlib.Path:
+        '''
+        Get path of generated translation file.
+        '''
+        
+        return self.project_directory / "generated_translation.csv"
+    
+    def srt_path(self) -> pathlib.Path:
+        '''
+        Get path of srt (sub for video) file.
+        '''
+        
+        return self.project_directory / "sub.srt"
     
     def get_language_code_from_full(self, full: str) -> LanguageCode:
         '''

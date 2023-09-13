@@ -1,6 +1,7 @@
 from YoutubeTranslator.Utils import Consts
 import pandas as pd
 from pydub import AudioSegment
+import srt
 
 class VideoDataMaker:
     '''
@@ -14,13 +15,17 @@ class VideoDataMaker:
     def run(
         self,
         df_translated: pd.DataFrame,
-        should_make_dub: bool,        
+        should_make_sub: bool,        
     ):
         #must
         df_generated = self.make_single_audio(df_translated)
         
         #save df
-        df_generated.to_csv((self.consts.project_directory / "generated.csv").as_posix(), index=True)
+        df_generated.to_csv((self.consts.generated_translation_path()).as_posix(), index=True)
+        
+        #make sub
+        if should_make_sub:
+            self.make_sub(df_generated)
     
     def make_single_audio(self, df_translated: pd.DataFrame) -> pd.DataFrame:
         '''
@@ -44,7 +49,7 @@ class VideoDataMaker:
             ends.append(combined.duration_seconds)
             
         #save
-        combined.export((self.consts.generated_sound_folder / "integrated.mp3").as_posix(), format="mp3")
+        combined.export((self.consts.integrated_sound_path()).as_posix(), format="mp3")
         
         #add to df
         df_output = df_translated.copy()
@@ -52,6 +57,36 @@ class VideoDataMaker:
         df_output["generated_end"] = ends
         
         return df_output
+    
+    def make_sub(self, df_generated: pd.DataFrame) -> None:
+        '''
+        Make sub and save it as "sub.srt"
+        '''
+        
+        #make individual sub
+        subs = []
+        for index, row in df_generated.iterrows():
+            sub = srt.Subtitle(
+                index=index,
+                start=srt.timedelta(seconds=row["generated_start"]),
+                end=srt.timedelta(seconds=row["generated_end"]),
+                content=self.make_sub_text(row["text"], row["translated_text"])
+            )
+            subs.append(sub)
+            
+        #integrate
+        sub_integrated = srt.compose(subs)
+        
+        #save
+        with open((self.consts.srt_path()).as_posix(), "w") as f:
+            f.write(sub_integrated)
+            
+    def make_sub_text(self, text_before:str, text_after:str) -> str:
+        '''
+        Make sub text from before and after text.
+        '''
+        
+        return f"{text_before} || {text_after}"
     
 if __name__ == "__main__":
     ins = VideoDataMaker(Consts("test", "APIkey.txt"))
