@@ -2,7 +2,7 @@ from YoutubeTranslator.Utils import Consts
 from YoutubeTranslator.VideoGetter import VideoGetter
 from YoutubeTranslator.Transcriber import TranscriberWhisper
 from YoutubeTranslator.LanguageTranslator import LanguageTranslatorDeepl
-from YoutubeTranslator.VoiceTranslator import VoiceTranslatorVALLEXAllPrompt, VoiceTranslatorVALLEXSingle
+from YoutubeTranslator.VoiceTranslator import VoiceTranslatorVALLEXAllPrompt, VoiceTranslatorVALLEXSingle, VoiceSamplerVALLEX
 from YoutubeTranslator.VideoDataMaker import VideoDataMaker
 
 class YoutubeTranslator:
@@ -38,18 +38,22 @@ class YoutubeTranslator:
         if voice_translation_option == "vallex_all_prompt":
             VoiceTranslatorVALLEXAllPrompt(self.consts).run(df_translated)
         elif voice_translation_option == "vallex_one_prompt":
-            VoiceTranslatorVALLEXAllPrompt(self.consts).run(df_translated)
+            VoiceSamplerVALLEX(self.consts).run(df_translated)
             
             print(
                 "Please input prompt name from customs folder in your working directory. \n"\
-                "You can compare prompt by listening to output/(this_project_name)/generated_sound/(index).mp3."
+                "You can compare prompt by listening to output/(this_project_name)/generated_sound/(index).mp3.\n"\
+                "If you want to generate again, input 'again'.\n"
             )
             
             #wait for user
             while True:
                 prompt = input()
                 
-                if VoiceTranslatorVALLEXSingle.check_prompt_exists(self.consts, prompt):
+                if prompt == "again":
+                    VoiceSamplerVALLEX(self.consts).run(df_translated)
+                    print("generated.")
+                elif VoiceTranslatorVALLEXSingle.check_prompt_exists(self.consts, prompt):
                     break
                 else:
                     print("Invalid prompt. Please input again. Prompt should exists from customs folder in your working directory.")

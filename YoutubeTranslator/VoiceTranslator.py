@@ -98,7 +98,21 @@ class VoiceTranslatorVALLEXAllPrompt(VoiceTranslator):
         write_wav(generated_path.as_posix(), SAMPLE_RATE, audio)
         
         return generated_path
-    
+
+class VoiceSamplerVALLEX(VoiceTranslatorVALLEXAllPrompt):
+    def generate_voice(self, prompt_name: str, text_generating: str) -> pathlib.Path:
+        #generate
+        audio = generate_audio(
+            self.consts.voice_sample_text,
+            prompt=prompt_name
+        )
+        
+        #save
+        generated_path = self.consts.generated_sound_folder / f"{prompt_name}.wav"
+        write_wav(generated_path.as_posix(), SAMPLE_RATE, audio)
+        
+        return generated_path
+
 class VoiceTranslatorVALLEXSingle(VoiceTranslator):
     '''
     Using VALLEX by using only one prompt.  
@@ -134,6 +148,7 @@ class VoiceTranslatorVALLEXSingle(VoiceTranslator):
     
 if __name__ == "__main__":
     #ins = VoiceTranslatorVALLEXAllPrompt(Consts("test", "APIkey.txt"))
-    ins = VoiceTranslatorVALLEXSingle(Consts("test", "APIkey.txt"), "test_24")
+    ins = VoiceSamplerVALLEX(Consts("test", "APIkey.txt"))
+    #ins = VoiceTranslatorVALLEXSingle(Consts("test", "APIkey.txt"), "test_20")
     df_translation = pd.read_csv(ins.consts.translation_text_path(), index_col=0)
     ins.run(df_translation)

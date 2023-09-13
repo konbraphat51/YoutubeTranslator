@@ -43,6 +43,8 @@ class Consts:
             self.LanguageCode("Japanese", "ja", "JA"),
         ]
         
+        self.voice_sample_text = "This is a sample voice. What you want from me? Kato Junichi is the strongest youtuber in Tokyo, Japan."
+        
     def __initialize_api(self, api_txt: pathlib.Path) -> None:
         with open(api_txt, "r") as f:
             #by row
