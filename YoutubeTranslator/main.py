@@ -59,4 +59,4 @@ class YoutubeTranslator:
         VideoDataMaker(self.consts).run(df_translated, should_make_sub=True)
                 
 if __name__ == "__main__":
-    YoutubeTranslator(Consts("test", "APIkey.txt")).run("https://www.youtube.com/watch?v=ThhhNAMaJcw")
+    YoutubeTranslator(Consts("test", "APIkey.txt")).run("https://www.youtube.com/watch?v=ThhhNAMaJcw", voice_translation_option="vallex_one_prompt")
