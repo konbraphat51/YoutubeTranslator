@@ -127,5 +127,5 @@ class VoiceTranslatorVALLEXSingle(VoiceTranslator):
 if __name__ == "__main__":
     #ins = VoiceTranslatorVALLEXAllPrompt(Consts("test", "APIkey.txt"))
     ins = VoiceTranslatorVALLEXSingle(Consts("test", "APIkey.txt"), "test_24")
-    df_translation = pd.read_csv(ins.consts.translation_text_path())
+    df_translation = pd.read_csv(ins.consts.translation_text_path(), index_col=0)
     ins.run(df_translation)
