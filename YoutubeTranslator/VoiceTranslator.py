@@ -124,6 +124,14 @@ class VoiceTranslatorVALLEXSingle(VoiceTranslator):
         
         return generated_path
     
+    def check_prompt_exists(consts:Consts, prompt_name:str) -> bool:
+        '''
+        Check if prompt file exists.  
+        Use this method before using this class.
+        '''
+        
+        return (consts.working_directory / "customs" / f"{prompt_name}.npz").exists()
+    
 if __name__ == "__main__":
     #ins = VoiceTranslatorVALLEXAllPrompt(Consts("test", "APIkey.txt"))
     ins = VoiceTranslatorVALLEXSingle(Consts("test", "APIkey.txt"), "test_24")

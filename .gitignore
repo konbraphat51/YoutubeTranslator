@@ -1,5 +1,5 @@
-YoutubeTranslator/output/*
-!YoutubeTranslator/output/.gitkeep
+output/*
+!output/.gitkeep
 customs/*
 !customs/.gitkeep
 __pycache__/

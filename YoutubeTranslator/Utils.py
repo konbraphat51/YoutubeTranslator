@@ -17,7 +17,8 @@ class Consts:
     def __init__(self, project_title:str, api_txt: pathlib.Path) -> None:
         self.project_title:str = project_title
         
-        self.working_directory:pathlib.Path = pathlib.Path(__file__).parent
+        self.library_directory:pathlib.Path = pathlib.Path(__file__).parent
+        self.working_directory:pathlib.Path = pathlib.Path.cwd()
         self.project_directory:pathlib.Path = self.working_directory / "output" / self.project_title
         
         #make directory in advance
