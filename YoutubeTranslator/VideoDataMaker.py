@@ -86,7 +86,7 @@ class VideoDataMaker:
         Make sub text from before and after text.
         '''
         
-        return f"{text_before} || {text_after}"
+        return f"{text_before}\n{text_after}"
     
 if __name__ == "__main__":
     ins = VideoDataMaker(Consts("test", "APIkey.txt"))
