@@ -21,22 +21,23 @@ class VoiceTranslator:
         for index, row in df_translated.iterrows():
             self.translate(index, row)
         
-    def translate(self, index:int, row_translation: pd.Series) -> None:
+    def translate(self, index:int, row_translation: pd.Series) -> pathlib.Path:
         '''
-        input: row of pd.DataFrame(start, end, text, translated_text)
+        input: row of pd.DataFrame(start, end, text, translated_text)  
+        output: path of generated voice file
         '''
         
         raise NotImplementedError("You must implement this method in a subclass.")
     
-class VoiceTranslatorVALLEX(VoiceTranslator):
+class VoiceTranslatorVALLEXAllPrompt(VoiceTranslator):
     '''
-    Using VALLEX.
+    Using VALLEX by "one sentence, one prompt" method
     '''
     def __init__(self, consts: Consts):
         super().__init__(consts)
         preload_models()
     
-    def translate(self, index:int, row_translation: pd.Series) -> None:
+    def translate(self, index:int, row_translation: pd.Series) -> pathlib.Path:
         #cut
         cut_file_path = self.cutoff_original(index, int(row_translation["start"]*1000), int(row_translation["end"]*1000))
         
@@ -98,7 +99,33 @@ class VoiceTranslatorVALLEX(VoiceTranslator):
         
         return generated_path
     
+class VoiceTranslatorVALLEXSingle(VoiceTranslator):
+    '''
+    Using VALLEX by using only one prompt.  
+    .npz prompt file should be in "customs" folder in working directory.  
+    .npz file is can be created by `VALLEX.utils.prompt_making.make_prompt` or `VoiceTranslatorVALLEX` or https://huggingface.co/spaces/Plachta/VALL-E-X.
+    '''
+    
+    def __init__(self, consts: Consts, prompt_name:str):
+        super().__init__(consts)
+        preload_models()
+        self.prompt_name = prompt_name
+        
+    def translate(self, index: int, row_translation: pd.Series) -> pathlib.Path:
+        #generate voice
+        audio = generate_audio(
+            row_translation["translated_text"],
+            prompt=self.prompt_name
+        )
+        
+        #save
+        generated_path = self.consts.generated_sound_folder / f"{self.consts.project_title}_{index}.wav"
+        write_wav(generated_path.as_posix(), SAMPLE_RATE, audio)
+        
+        return generated_path
+    
 if __name__ == "__main__":
-    ins = VoiceTranslatorVALLEX(Consts("test", "APIkey.txt"))
+    #ins = VoiceTranslatorVALLEXAllPrompt(Consts("test", "APIkey.txt"))
+    ins = VoiceTranslatorVALLEXSingle(Consts("test", "APIkey.txt"), "test_24")
     df_translation = pd.read_csv(ins.consts.translation_text_path())
     ins.run(df_translation)

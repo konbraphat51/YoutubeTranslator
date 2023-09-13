@@ -1,7 +1,7 @@
 from YoutubeTranslator.Utils import Consts
 from YoutubeTranslator.VideoGetter import VideoGetter
-from YoutubeTranslator.Transcriber import Transcriber
-from YoutubeTranslator.LanguageTranslator import LanguageTranslator
+from YoutubeTranslator.Transcriber import TranscriberWhisper
+from YoutubeTranslator.LanguageTranslator import LanguageTranslatorDeepl
 # from YoutubeTranslator.VoiceSampler import VoiceSampler
 # from YoutubeTranslator.VoiceTranslator import VoiceTranslator
 
@@ -18,10 +18,10 @@ class YoutubeTranslator:
         VideoGetter(self.consts).run(video_link)
 
         #transcribe
-        df_transcription, original_language = Transcriber(self.consts).run()
+        df_transcription, original_language = TranscriberWhisper(self.consts).run()
 
         #translate language
-        df_translated = LanguageTranslator(self.consts).run(df_transcription, original_language, self.consts.get_language_code_from_full(language_destination))
+        df_translated = LanguageTranslatorDeepl(self.consts).run(df_transcription, original_language, self.consts.get_language_code_from_full(language_destination))
         df_translated.to_csv(self.consts.translation_text_path(), index=True)
         
 if __name__ == "__main__":
