@@ -16,6 +16,8 @@ class YoutubeTranslator:
         language_destination:str = "English"
     ):
         '''
+        Download -> translate language -> translate voice -> make video data
+        
         Args:
             voice_translation_option: "vallex_all_prompt", "vallex_one_prompt"
             "vallex_all_prompt": Using VoiceTranslatorVALLEXAllPrompt
